@@ -39,6 +39,19 @@ class Bank:
         pass
 
 
+    @classmethod
+    def setBanks(cls, userID):
+        query = "SELECT ID, Name, Phone FROM bank WHERE EXISTS (SELECT DISTINCT account.BankId FROM account INNER JOIN customer ON customerID = customer.ID WHERE customerID = %s)"
+        banks = Database.Query(Database, query, userID)
+        clsBanks : Bank = []
+        for bank in banks:
+            clsBanks.append(cls(bank))
+        
+        return clsBanks
+
+
+
+
     def createUsersBanks(self, userID):
         query = "SELECT DISTINCT bank.ID, bank.Name, bank.Phone FROM bank INNER JOIN account ON account.BankId = bank.ID WHERE account.customerID = %s"
         banks = self.db.Query(Database, query, userID)

@@ -13,6 +13,7 @@ from ViewBMS.Krediler import Ui_Credit
 from ModelBMS.database import Database as db
 from ControllerBMS.UserCls import User as usr
 from ControllerBMS.Bank import Bank 
+from ControllerBMS.Account import Account
 
 
 class Ui_BMS(object):
@@ -49,42 +50,45 @@ class Ui_BMS(object):
        self.win = Ui_Credit(self.winBMS)
 
 
-    #BMS ekranına User'ın hesaplarını döndürür.
-    def getUsersAccounts(self):
-        self.returnSelectedBankID()
 
     #BMS ekranında seçilen bankanın ID'sini döndürür.
-    def returnSelectedBankID(self):
-        self.comboBox.currentText()
-        return 
+    def returnSelectedBank(self):
+        return self.comboBox.currentText()
 
     #User'ın ID sini geri döndürür.
     def returnOnlineUserID(self):
         return str(self.onlineUser.getID())
 
 
-    #BMS ekranında seçilen bankayı döndürür.
-    def getSelectedBank(self):
-        userID = self.returnOnlineUserID()
-        selectedBank = self.returnSelectedBank()
-        query = "SELECT * FROM account WHERE customerID = %s AND BankId = %s"
+    def viewBalance(self):
+        self.comboBox_2.curr
 
-        accounts = db.Query(db, query, userID, selectedBank)
 
 
 
     #User'a ait bankaları döndürür. 
-    #def getUsersBank(self):
-    #    userID = self.onlineUser.getID()
-    #    banks = self.bk.getUsersBank(userID)
-    #    self.viewBanks(banks)
-
+    def getUsersBank(self):
+        clsBank = self.onlineUser.getBanks()
+        self.viewBanks(clsBank)
 
     #User'a ait bankaları BMS ekranında listeler.
-    def viewBanks(self, banks):
+    def viewBanks(self, banks : Bank):
         for bank in banks:
-            self.comboBox.addItem(bank[0])
+            bankName = bank.getbankName()
+            self.comboBox.addItem(bankName)
         print("Bankalar getirildi.")
+
+    
+    #BMS ekranına User'ın hesaplarını döndürür.
+    def getUsersAccounts(self):
+        clsAccounts = self.onlineUser.getAccounts()
+        self.viewAccounts(clsAccounts)
+
+    def viewAccounts(self, accounts : Account):
+        for account in accounts:
+            accountName = account.getAccountNo()
+            self.comboBox_2.addItem(accountName)
+        print("Hesaplar getirildi.")
 
 
 
@@ -106,8 +110,8 @@ class Ui_BMS(object):
         self.comboBox.setGeometry(QtCore.QRect(350, 0, 141, 22))
         self.comboBox.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.comboBox.setObjectName("comboBox")
-        #self.getUsersBank()
-
+        self.getUsersBank()
+        
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(300, 180, 31, 31))
         self.pushButton.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -232,7 +236,7 @@ class Ui_BMS(object):
         self.comboBox_2.setGeometry(QtCore.QRect(350, 30, 141, 22))
         self.comboBox_2.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.comboBox_2.setObjectName("comboBox_2")
-        #self.getUsersAccounts()
+        self.getUsersAccounts()
      
 
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
@@ -305,18 +309,12 @@ class Ui_BMS(object):
     def retranslateUi(self, BMS):
         _translate = QtCore.QCoreApplication.translate
         BMS.setWindowTitle(_translate("BMS", "BMS"))
-        #self.comboBox.setItemText(0, _translate("BMS", "BANKA SEÇİNİZ"))
-        #self.comboBox.setItemText(1, _translate("BMS", "A"))
-        #self.comboBox.setItemText(2, _translate("BMS", "New Item"))
         self.pushButton_6.setText(_translate("BMS", "KREDİ İŞLEMLERİ"))
         self.pushButton_7.setText(_translate("BMS", "AYARLAR"))
         self.pushButton_5.setText(_translate("BMS", "PARA TRANSFERLERİ"))
         self.pushButton_8.setText(_translate("BMS", "ÖDEMELER"))
         self.pushButton_9.setText(_translate("BMS", "HESAP HAREKETLERİ"))
         self.pushButton_10.setText(_translate("BMS", "GÜVENLİ ÇIKIŞ"))
-        #self.comboBox_2.setItemText(0, _translate("BMS", "HESAP SEÇİNİZ"))
-        #self.comboBox_2.setItemText(1, _translate("BMS", "A"))
-        #self.comboBox_2.setItemText(2, _translate("BMS", "New Item"))
         self.label_7.setText(_translate("BMS", "<html><head/><body><p><span style=\" font-weight:600;\">Bakiye</span></p></body></html>"))
         self.label_2.setText(_translate("BMS", "<html><head/><body><p><span style=\" font-weight:600;\">Borçlar</span></p></body></html>"))
 

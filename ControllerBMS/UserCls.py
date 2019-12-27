@@ -26,6 +26,7 @@ class User:
         self.__payments = Payment
         self.__accounts = Account
         self.__credits = Credit
+        self.__banks = Bank
         self.banks : Bank = Bank
         self.db = Database
         
@@ -37,9 +38,10 @@ class User:
     def getUserID(self):
         return self.__ID
 
-    
+    def createUsersBanks(self):
+        onlineUserID = self.getID()
+        self.__banks = Bank.setBanks(onlineUserID)
         
-
     def createUsersPayments(self):
         onlineUserID = self.getID()
         self.__payments = Payment.setPayments(onlineUserID)
@@ -80,16 +82,17 @@ class User:
     def getID(self):
         return self.__ID
 
+    def getBanks(self):
+        return self.__banks
+
     def getPayments(self):
         return self.__payments
 
     def getAccounts(self):
-        account = Account(self.getUsername())
-        return account
-
+        return self.__accounts
+        
     def getCredit(self):
-        credit = Credit(self.getUsername())
-        return credit
+        return  self.__credits
 
     def setFirstName(self, newName):
         self.__firstName = newName

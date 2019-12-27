@@ -12,7 +12,7 @@ class Account:
         self.__iban = usersAccountsInfo[2]
         self.__balance = usersAccountsInfo[3]
         self.__bankId = usersAccountsInfo[4]
-        self.__userId = usersAccountsInfo[6] 
+        self.__userId = usersAccountsInfo[5] 
         
         #self.__activity = AccountActivity()
 
@@ -70,9 +70,11 @@ class Account:
 
     @classmethod
     def setAccounts(cls, userID):
-        query = "SELECT * FROM account INNER JOIN customer ON customerID = customer.ID WHERE customerID = %s"
+        query = "SELECT account.ID, AccountNo, IBAN, Balance, BankId, customer.ID FROM account INNER JOIN customer ON customerID = customer.ID WHERE customerID = %s"
         accounts = Database.Query(Database, query, userID)
         clsAccounts : Account = []
         for account in accounts:
             clsAccounts.append(cls(account))
         return clsAccounts
+
+
