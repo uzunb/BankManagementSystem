@@ -83,12 +83,11 @@ class Database:
             print(er)
         try:
             result = cursor.fetchall()
-            print(result)
         except Error as er:
             result = self.connection.commit()
 
         self.disconnectDatabase(self)
-           
+        print(result)
         return result
 
     #random Customer ekleme
